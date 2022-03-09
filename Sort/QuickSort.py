@@ -21,7 +21,7 @@ def quick_sort(l: list, left: int, right: int) -> None:
         quick_sort(l, pivot + 1, right)
 
 if __name__ == '__main__':
-    l = sample(range(0, 100), 15)
+    l = sample(range(0, 100), 16)
     print(l)
     quick_sort(l, 0, len(l) - 1)
     print(l)

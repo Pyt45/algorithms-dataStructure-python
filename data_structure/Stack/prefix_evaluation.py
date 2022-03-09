@@ -6,6 +6,7 @@ operand: Dict[str, function] = {
     '-': lambda x, y: x - y,
     '/': lambda x, y: x / y,
     '*': lambda x, y: x * y,
+    '^': lambda x, y: x ^ y,
 }
 
 def eval_expression(expression: str, sep: bool = False):
@@ -14,7 +15,7 @@ def eval_expression(expression: str, sep: bool = False):
     for i in exprs:
         if i.isdigit() is True:
             s.append(i)
-        elif i in ['+', '-', '/', '*']:
+        elif i in ['+', '-', '/', '*', '^']:
             s.append(operand[i](int(s.pop()), int(s.pop())))
     return s[-1]
 
