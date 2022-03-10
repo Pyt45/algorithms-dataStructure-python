@@ -3,36 +3,67 @@ from typing import Generic, TypeVar
 
 T = TypeVar("T")
 
+class QueueOverflowError(BaseException):
+    pass
+
+class QueueUnderflowError(BaseException):
+    pass
+
 class Queue(Generic[T]):
     def __init__(self, limit: int = 0) -> None:
-        self.items = []
-        self.limit = limit
-        self.index = 0
+        self.queue: list[T] = []
+        self.limit: int = limit
+        self.index: int = 0
 
     def __str__(self) -> str:
-        return f"{self.items}"
+        return f"{self.queue}"
     
     def __contains__(self, item) -> bool:
         """check if item in queue"""
-        return item in self.items
+        return item in self.queue
     
     def is_empty(self) -> bool:
-        pass
+        return self.index == 0
+
+    def is_full(self) -> bool:
+        return self.index == self.limit
     
     def size(self) -> int:
-        pass
+        return self.index
 
     def peek(self) -> T:
         """return the item at the top of the queue"""
-        pass
+        if self.index == 0:
+            raise QueueUnderflowError
+        return self.queue[self.index - 1]
 
-    def enqueue(self, item) -> T:
+    def enqueue(self, item: int) -> T:
         """insert an item to the end of the queue"""
-        pass
+        if self.index >= self.limit:
+            raise QueueOverflowError
+        self.index += 1
+        self.queue.append(item)
 
-    def dequeue(self, item) -> T:
+    def dequeue(self) -> T:
         """delete an item from the beginning of the queue"""
-        pass
+        if self.index == 0:
+            raise QueueUnderflowError
+        self.index -= 1
+        return self.queue.pop(0)
 
 if __name__ == '__main__':
-    q = Queue(5)
+    q = Queue[int](5)
+    print(q.size())
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    q.enqueue(4)
+    q.enqueue(5)
+
+    print(f"queue: {str(q)}")
+    print(f"size = {q.size()}")
+
+    print(f"last: {q.peek()}")
+    print(f"poped: {q.dequeue()}")
+    print(f"queue: {str(q)}")
+    print(f"size = {q.size()}")
